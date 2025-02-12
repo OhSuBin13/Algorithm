@@ -1,76 +1,40 @@
 #include <iostream>
-#include <vector>
+#define LM 100000 + 10
+#define INF 987654321
+using LL = long long;
 using namespace std;
 
 int N;
-vector<int> v;
-vector<long long int> sum;
-long long int objectNum;
-bool flag = true;
-int res = 0;
+LL sum[LM], arr[LM];
+LL dp[LM][5];
 
 void Input() {
 	cin >> N;
-	sum.resize(N);
-
-	for (int i = 0; i < N; i++) {
-		int num;
-		cin >> num;
-		v.push_back(num);	
+	for (int i = 1; i <= N; i++) {
+		cin >> arr[i];
 	}
-
-	sum[0] = v[0];
-
-	for (int i = 1; i < N; i++) {
-		sum[i] = sum[i - 1] + v[i];
-	}
-
-	if (sum[N - 1] % 4 == 0) objectNum = sum[N - 1] / 4;
-	else flag = false;
 }
 
-void BackTracking(int start, int cnt) {
-	if (cnt == 4) {
-		res++;
-		return;
+LL DP() {
+	for (int i = 1; i <= N; i++) {
+		sum[i] = sum[i - 1] + arr[i];
 	}
 
-	if (start >= N) {
-		return;
-	}
+	LL query = sum[N] / 4;
+	if (query * 4 != sum[N]) return 0;
 
-	if (cnt == 3 && sum[N-1] - sum[start-1] == objectNum) {
-		BackTracking(N, cnt + 1);
-		return;
-	}
-
-	for (int i = start; i < N; i++) {
-		if (sum[i] - sum[start - 1] == objectNum) {
-			BackTracking(i + 1, cnt + 1);
+	dp[0][0] = 1;
+	for (int i = 1; i <= N; i++) {
+		dp[i][0] = 1;
+		for (int j = 1; j <= 3; j++) {
+			dp[i][j] = dp[i - 1][j];
+			if (query * j == sum[i]) dp[i][j] += dp[i - 1][j - 1];
 		}
 	}
-}
-
-void Solution() {
-	if (!flag) {
-		res = 0;
-		return;
-	}
-
-	for (int i = 0; i < N; i++) {
-		if (sum[i] == objectNum) {
-			BackTracking(i + 1, 1);
-		}
-	}
-}
-
-void Solve() {
-	Input();
-	Solution();
-	cout << res;
+	return dp[N - 1][3];
 }
 
 int main() {
-	Solve();
-	return 0;
+	Input();
+	cout << DP();
 }
