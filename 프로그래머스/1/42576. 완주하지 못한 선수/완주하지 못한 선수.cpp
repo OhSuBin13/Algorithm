@@ -1,12 +1,12 @@
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <iostream>
 using namespace std;
 
 string solution(vector<string> participant, vector<string> completion) {
     string answer = "";
-    map<string, int> m;
+    unordered_map<string, int> m;
     for (int i = 0; i < completion.size(); i++) {
         if (m.find(completion[i]) == m.end()) {
             m[completion[i]] = 1;
