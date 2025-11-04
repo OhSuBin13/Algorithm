@@ -1,47 +1,40 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
+#define MAX 100000
 using namespace std;
+typedef long long ll;
+
+vector<ll> checktime(MAX);
 
 int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 
-	int N, M; // 입국 심사대, 인원 수
-	vector<long long int> t; // 심사 시간
-	cin >> N >> M;
-	t.resize(N);
 
+	int N, M; cin >> N >> M; // N : immigration checkpoint, M : number of people
 	for (int i = 0; i < N; i++) {
-		cin >> t[i];
+		cin >> checktime[i];
 	}
+	sort(checktime.begin(), checktime.begin() + N); // sort to get the minimum time easily
+	ll ans = checktime[0] * M;
+	ll left = 1; // min time
+	ll right = checktime[0] * M; // max time
 
-	sort(t.begin(), t.end());
-
-	unsigned long long high = M * t[0];
-	// 심사 시간이 제일 적은 데스크에 모든 사람이 검사 받는 경우를 최대 값으로 잡아줌
-	unsigned long long low = 1;
-	unsigned long long mid;
-	unsigned long long ans = 0;
-	unsigned long long people;
-
-	while (high >= low) {
-		people = 0;
-		mid = (high + low) / 2;
-		for (int i = 0; i < N; i++) {
-			people += mid / t[i];
+	while (left <= right) { // binary search
+		ll mid = (left + right) / 2;
+		ll total = 0; // total number of people that can be processed in mid time
+		for (int i = 0; i < N; i++) { // calculate how many people can be processed in mid time
+			total += mid / checktime[i];
 		}
-
-		if (people >= M) {
-			if (ans > mid || ans == 0) {
-				ans = mid;
-			}
-			high = mid - 1;
+		if (total >= M) { // if can process M people in mid time, try to find a smaller time
+			right = mid - 1;
+			ans = min(ans, mid);
 		}
-		else {
-			low = mid + 1;
+		else { // if cannot process M people in mid time, need more time
+			left = mid + 1;
 		}
 	}
-
 	cout << ans;
-
 	return 0;
 }
