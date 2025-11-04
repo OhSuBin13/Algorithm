@@ -1,7 +1,7 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
 #define MAX 100000
+#define INF 1e9
 using namespace std;
 typedef long long ll;
 
@@ -11,15 +11,16 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 
-
+	int minTime = INF; // minimum time among all checkpoints
 	int N, M; cin >> N >> M; // N : immigration checkpoint, M : number of people
 	for (int i = 0; i < N; i++) {
 		cin >> checktime[i];
+		minTime = min(minTime, checktime[i]);
 	}
-	sort(checktime.begin(), checktime.begin() + N); // sort to get the minimum time easily
-	ll ans = (ll)checktime[0] * M;
+
+	ll ans = (ll)minTime * M;
 	ll left = 1; // min time
-	ll right = (ll)checktime[0] * M; // max time
+	ll right = (ll)minTime * M; // max time
 
 	while (left <= right) { // binary search
 		ll mid = (left + right) / 2;
