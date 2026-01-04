@@ -45,7 +45,6 @@ int solution(vector<vector<int>> jobs) {
             int elapsedTime = jobList[jobIdx].second.second;
             waitingQueue.push({ elapsedTime,{requestTime, jobId} });
             jobIdx++;
-            //cout << "request: " << requestTime << " elapsed: " << elapsedTime << " jobId: " << jobId << "\n";
         }
         if (!waitingQueue.empty()) {
             pair<int, pii> job = waitingQueue.top();
@@ -56,8 +55,6 @@ int solution(vector<vector<int>> jobs) {
             time += elapsedTime;
             answer += time - requestTime;
             completed_jobs++;
-            //cout << "waiting " << "request: " << requestTime << " elapsed: " << elapsedTime << " jobId: " << jobId << "\n";
-            //cout << "answer: " << answer << "\n";
         }
         else {
             if (jobIdx < jobSize) {
