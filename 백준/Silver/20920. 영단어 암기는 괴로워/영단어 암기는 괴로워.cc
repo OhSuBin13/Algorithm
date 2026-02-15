@@ -4,7 +4,7 @@
 using namespace std;
 
 struct compare {
-	bool operator()(pair<int, string> a, pair<int, string> b) {
+	bool operator()(const pair<int, string>& a, const pair<int, string>& b) {
 		if (a.first != b.first) return a.first < b.first;
 		else if (a.second.size() != b.second.size()) return a.second.size() < b.second.size();
 		return a.second > b.second;
