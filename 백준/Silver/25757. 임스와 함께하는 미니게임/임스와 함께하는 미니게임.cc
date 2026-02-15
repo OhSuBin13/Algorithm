@@ -7,17 +7,19 @@ using namespace std;
 int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(NULL);
-	map<char, int> game; // type, people
-	game['Y'] = 2, game['F'] = 3, game['O'] = 4;
 	unordered_set<string> wait;
 	string name;
 	int N;
+	int divisor;
 	char type;
 	cin >> N >> type;
+	if (type == 'Y') divisor = 1;
+	else if (type == 'F') divisor = 2;
+	else divisor = 3;
 	for (int i = 0; i < N; i++) {
 		cin >> name;
 		wait.insert(name);
 	}
-	cout << wait.size() / (game[type] - 1);
+	cout << wait.size() / divisor;
 	return 0;
 }
