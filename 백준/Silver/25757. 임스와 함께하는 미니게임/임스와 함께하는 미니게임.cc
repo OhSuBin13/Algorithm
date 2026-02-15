@@ -1,13 +1,15 @@
 #include <iostream>
-#include <set>
+#include <unordered_set>
 #include <map>
 using namespace std;
 
 
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
 	map<char, int> game; // type, people
 	game['Y'] = 2, game['F'] = 3, game['O'] = 4;
-	set<string> wait;
+	unordered_set<string> wait;
 	string name;
 	int N;
 	char type;
