@@ -1,4 +1,4 @@
-#include<string>
+#include <string>
 #include <iostream>
 #include <stack>
 using namespace std;
@@ -6,20 +6,15 @@ using namespace std;
 bool solution(string s)
 {
     bool answer = true;
-
-    stack<char> bracket;
+    stack<char> tmp;
     for (int i = 0; i < s.size(); i++) {
-        if (s[i] == ')') {
-            if (!bracket.empty()) bracket.pop();
-            else {
-                answer = false;
-                break;
-            }
-        }
+        char x = s[i];
+        if (s[i] == '(') tmp.push('(');
         else {
-            bracket.push(s[i]);
+            if (tmp.empty()) return false;
+            else tmp.pop();
         }
     }
-    if (!bracket.empty()) answer = false;
+    if (!tmp.empty()) return false;
     return answer;
 }
