@@ -1,21 +1,18 @@
 #include <string>
 #include <vector>
-#include <algorithm>
+
 using namespace std;
 
 int solution(vector<int> citations) {
     int answer = 0;
-    int numOfPaper = citations.size();
-    int quotation = 0;
-
-    sort(citations.begin(), citations.end());
+    vector<int> v(10001);
     for (int i = 0; i < citations.size(); i++) {
-        quotation = citations[i];
-        if (quotation <= numOfPaper) {
-            answer = quotation;
+        for (int j = citations[i]; j >= 0; j--) {
+            v[j]++;
         }
-        else answer = max(answer, numOfPaper);
-        numOfPaper--;
+    }
+    for (int i = 10000; i >= 0; i--) {
+        if (v[i] >= i) return i;
     }
     return answer;
 }
