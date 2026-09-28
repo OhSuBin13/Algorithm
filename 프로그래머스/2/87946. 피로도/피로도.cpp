@@ -1,29 +1,35 @@
 #include <string>
 #include <vector>
-
 using namespace std;
+struct User
+{
+    int hp;
+};
 
-bool visited[8];
-
-int dfs(int size, int curStamina, vector<vector<int>> dungeons) {
-    bool flag = true;
-    for (int i = 0; i < dungeons.size(); i++) {
-        if (visited[i] || curStamina < dungeons[i][0]) continue;
-        flag = false;
+void dfs(int& ans, int cnt, User user, vector<vector<int>> dungeons, vector<bool> visited) {
+    if (cnt == dungeons.size()) {
+        ans = cnt;
+        return;
     }
-    if (flag) return size;
-    int ans = 0;
+    
     for (int i = 0; i < dungeons.size(); i++) {
-        if (visited[i] || curStamina < dungeons[i][0]) continue;
+        if (visited[i]) continue;
+        if (dungeons[i][0] > user.hp) continue;
+
         visited[i] = true;
-        ans = max(ans, dfs(size + 1, curStamina - dungeons[i][1], dungeons));
+        User newUser = { user.hp - dungeons[i][1]};
+        dfs(ans, cnt + 1, newUser, dungeons, visited);
         visited[i] = false;
     }
-    return ans;
+
+    ans = max(ans, cnt);
+    return;
 }
 
 int solution(int k, vector<vector<int>> dungeons) {
     int answer = -1;
-    answer = dfs(0, k, dungeons);
+    User user = { k };
+    vector<bool> visited(dungeons.size());
+    dfs(answer, 0, user, dungeons, visited);
     return answer;
 }
