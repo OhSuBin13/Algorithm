@@ -1,23 +1,18 @@
 class Solution {
-  public int solution(int n, int[] stations, int w) {
-    int answer = 0;
-    int range = 2 * w + 1;
-    int start = 1;
+    public int solution(int n, int[] stations, int w) {
+        int answer = 0;
 
-    for (int s : stations) {
-      int left = s - w;
-      if (start < left) {
-        int gap = left - start;
-        answer += (gap + range - 1) / range;
-      }
-      start = s + w + 1;
+        int start = 1;
+        int end = 1;
+
+        for(int station : stations) {
+            end = station - w;
+            answer += (end - start + 2 * w) / (2 * w + 1);
+            start = station + w + 1;
+        }
+
+        answer += (n - start + 1 + 2 * w) / (2 * w + 1);
+
+        return answer;
     }
-
-    if (start <= n) {
-      int gap = n - start + 1;
-      answer += (gap + range - 1) / range;
-    }
-
-    return answer;
-  }
 }
