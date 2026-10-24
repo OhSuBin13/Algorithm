@@ -1,51 +1,50 @@
-import java.util.ArrayDeque;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
+import java.util.PriorityQueue;
 
 class Solution {
-  public int[] solution(int n, int[][] roads, int[] sources, int destination) {
-    List<Integer>[] graph = new ArrayList[n + 1];
-
-    for (int i = 1; i <= n; i++) {
-      graph[i] = new ArrayList<>();
-    }
-
-    for (int[] road : roads) {
-      int a = road[0];
-      int b = road[1];
-      graph[a].add(b);
-      graph[b].add(a);
-    }
-
-    int[] distance = new int[n + 1];
-    Arrays.fill(distance, -1);
-
-    Queue<Integer> queue = new ArrayDeque<>();
-
-    distance[destination] = 0;
-    queue.offer(destination);
-
-    while(!queue.isEmpty()) {
-      int current = queue.poll();
-
-      for (int next : graph[current]) {
-        if (distance[next] != -1) {
-          continue;
+    public int[] solution(int n, int[][] roads, int[] sources, int destination) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] r : roads) {
+            graph.get(r[0]).add(r[1]);
+            graph.get(r[1]).add(r[0]);
         }
 
-        distance[next] = distance[current] + 1;
-        queue.offer(next);
-      }
+        final int INF = Integer.MAX_VALUE;
+        int[] dist = new int[n + 1];
+        Arrays.fill(dist, INF);
+        dist[destination] = 0;
+
+        // {지역, 누적 비용}, 비용 오름차순
+        PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> Integer.compare(x[1], y[1]));
+        pq.offer(new int[]{destination, 0});
+
+        while(!pq.isEmpty()) {
+            int[] cur = pq.poll();
+            int node = cur[0];
+            int cost = cur[1];
+
+            if (cost > dist[node]) continue;
+
+            for (int next : graph.get(node)) {
+                int newCost = cost + 1;
+                if (newCost < dist[next]) {
+                    dist[next] = newCost;
+                    pq.offer(new int[] {next, newCost});
+                }
+            }
+        }
+
+        int[] answer = new int[sources.length];
+        for (int i = 0; i < sources.length; i++) {
+            int d = dist[sources[i]];
+            answer[i] = (d == INF) ? -1 : d;
+        }
+        return answer;
     }
-
-    int[] answer = new int[sources.length];
-
-    for (int i = 0; i < sources.length; i++) {
-      answer[i] = distance[sources[i]];
-    }
-
-    return answer;
-  }
 }
