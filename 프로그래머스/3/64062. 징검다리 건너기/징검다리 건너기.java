@@ -1,37 +1,32 @@
 class Solution {
-  public int solution(int[] stones, int k) {
-    int left = 1;
-    int right = 200_000_000;
-    int answer = 0;
+    private int[] stones;
+    private int k;
+    public int solution(int[] stones, int k) {
+        int answer = 0;
+        this.stones = stones;
+        this.k = k;
+        int left = 0, right = 200_000_000;
 
-    while (left <= right) {
-      int mid = left + (right - left) / 2;
-
-      if (canCross(stones, k, mid)) {
-        answer = mid;
-        left = mid + 1;
-      } else {
-        right = mid - 1;
-      }
+        while (left < right) {
+            int mid = (left + right + 1) / 2;
+            if (canCross(mid)) {
+                left = mid;
+            } else {
+                right = mid - 1;
+            }
+        } 
+        return left;
     }
-    return answer;
-  }
 
-  private boolean canCross(int[] stones, int k, int people) {
-    int consecutive = 0;
+    private boolean canCross(int mid) {
+        int consecutive = 0;
 
-    for (int stone : stones) {
-      if (stone < people) {
-        consecutive++;
+        for (int stone : stones) {
+            if (stone < mid) consecutive++;
+            else consecutive = 0;
 
-        if (consecutive >= k) {
-          return false;
+            if (consecutive >= k) return false;
         }
-      } else {
-        consecutive = 0;
-      }
+        return true;
     }
-
-    return true;
-  }
 }
